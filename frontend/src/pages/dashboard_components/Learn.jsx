@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 // The API URL for your backend
-const API_URL = "http://localhost:8000/api";
+const API_BASE_URL = "https://hackwave-learnverse.onrender.com/api";
 
 // --- Helper Components for Rendering Content ---
 
