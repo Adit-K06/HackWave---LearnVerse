@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 // The API URL for your backend
-const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+const API_BASE_URL = `${import.meta.env.VITE_API_KEY}/api`;
 
 // --- Helper Components for Rendering Content ---
 
