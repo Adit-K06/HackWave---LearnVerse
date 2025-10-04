@@ -1,0 +1,44 @@
+--- General / OS / Editor Files ---
+Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+Ignore editor-specific settings
+.vscode/
+.idea/
+
+--- Frontend (React + Vite) ---
+Ignore all node_modules directories
+frontend/node_modules/
+
+Ignore build output folder
+frontend/dist/
+
+Ignore environment variables. These are secret and should not be committed.
+Only commit .env.example if you have one.
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+Ignore logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+--- Backend (Python + FastAPI) ---
+Ignore Python virtual environments
+backend/venv/
+backend/env/
+backend/.venv/
+
+Ignore Python bytecode and cache
+backend/pycache/
+*.pyc
+*.pyo
+*.pyd
+
+Ignore backend environment variables
+backend/.env
+
+Ignore user-uploaded files. The 'uploads' directory should not be tracked.
+backend/uploads/
