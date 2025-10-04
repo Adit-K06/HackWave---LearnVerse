@@ -20,9 +20,15 @@ from ai_core.utils import ensure_dir
 load_dotenv()
 app = FastAPI(title="LearnVerse Backend")
 
+# Find this section in your main.py file
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:5173", 
+        "http://localhost:3000",
+        "https://hack-wave-learn-verse.vercel.app"  
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
