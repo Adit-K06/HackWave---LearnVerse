@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// --- DEPENDENCY CHECKLIST ---
-// Ensure you have installed all necessary packages:
-// npm install axios @mui/material @emotion/react @emotion/styled mermaid
-// --------------------------
-
 // --- MUI Component Imports ---
 import {
   Box, Button, Typography, Paper, CircularProgress, List,
@@ -13,8 +8,9 @@ import {
   Radio, RadioGroup, FormControlLabel, FormControl
 } from '@mui/material';
 
-// The API URL for your backend
-const API_BASE_URL = `${import.meta.env.VITE_API_KEY}/api`;
+// --- API Configuration ---
+// This safely reads the environment variable set on Vercel or in your .env.local file.
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 // --- Helper Components for Rendering Content ---
 
@@ -24,7 +20,6 @@ const Mermaid = ({ chart }) => {
       mermaid.initialize({ startOnLoad: false, theme: 'default' });
       const element = document.querySelector(`.mermaid-container-${chart.replace(/\s/g, '')}`);
       if (element) {
-        // FIX: Using a more robust method for generating a unique ID to prevent potential rendering bugs.
         const uniqueId = `mermaid-svg-${Math.random().toString(36).substring(2, 9)}`;
         mermaid.render(uniqueId, chart, (svgCode) => {
           element.innerHTML = svgCode;
@@ -50,7 +45,7 @@ const ContentRenderer = ({ content }) => {
   );
 };
 
-// --- Main App Component ---
+// --- Main Learn Component ---
 
 export default function Learn() {
   const [concepts, setConcepts] = useState([]);
@@ -67,7 +62,7 @@ export default function Learn() {
     if (!file) return;
     const formData = new FormData();
     formData.append('file', file);
-
+    
     setIsLoading(true);
     setLoadingMessage("AI is analyzing your PDF...");
     setError("");
@@ -76,10 +71,10 @@ export default function Learn() {
     setExplanation("");
 
     try {
+      // FIX: Using the correct 'API_BASE_URL' variable
       const res = await axios.post(`${API_BASE_URL}/analyze-pdf`, formData);
-      setConcepts(res.data.concepts || []); // Guard against missing data
+      setConcepts(res.data.concepts || []);
     } catch (err) {
-      // FIX: Added console.error for easier debugging
       console.error("Error analyzing PDF:", err);
       setError(err.response?.data?.detail || "An unexpected error occurred while analyzing the PDF.");
     } finally {
@@ -91,7 +86,7 @@ export default function Learn() {
     if (isLoading) return;
     setSelectedConcept(concept);
     setIsLoading(true);
-    setLoadingMessage("AI is generating your learning module...");
+    setLoadingMessage("AI is generating your complete learning module...");
     setError("");
     setExplanation("");
     setScenario(null);
@@ -101,13 +96,12 @@ export default function Learn() {
     formData.append('concept', concept);
 
     try {
+      // FIX: Using the correct 'API_BASE_URL' variable
       const res = await axios.post(`${API_BASE_URL}/get-learning-module`, formData);
-      // FIX: Added guards (e.g., "|| []") to prevent crashes if the API response is missing a key.
       setExplanation(res.data.explanation || "");
       setScenario(res.data.scenario || null);
       setQuiz(res.data.questions || []);
     } catch (err) {
-      // FIX: Added console.error for easier debugging
       console.error("Error fetching learning module:", err);
       setError(err.response?.data?.detail || "An unexpected error occurred while fetching the topic.");
     } finally {
@@ -116,7 +110,7 @@ export default function Learn() {
   };
 
   return (
-    <Box sx={{ display: 'flex', height: 'calc(100vh - 48px)', gap: 3, p: 2, background: '#f4f6f8' }}>
+    <Box sx={{ display: 'flex', height: '100vh', gap: 3, p: 2, background: '#f4f6f8' }}>
       {/* Sidebar */}
       <Paper elevation={2} sx={{ width: '300px', p: 2, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
         <Typography variant="h5" gutterBottom>Topics</Typography>
@@ -194,6 +188,7 @@ function ScenarioComponent({ scenario, explanation }) {
     formData.append('user_answer', userAnswer);
     formData.append('explanation', explanation);
     try {
+      // FIX: Using the correct 'API_BASE_URL' variable
       const res = await axios.post(`${API_BASE_URL}/evaluate-answer`, formData);
       setFeedback(res.data.feedback);
     } catch (err) {
