@@ -58,6 +58,10 @@ async def analyze_pdf_and_get_concepts(file: UploadFile = File(...)):
 
 # --- ✅ NEW UNIFIED ENDPOINT ---
 # This single endpoint replaces the three separate ones for explanation, scenario, and quiz.
+@app.get("/")
+async def root():
+    return {"message": "LearnVerse AI Backend is running!"}
+
 @app.post("/api/get-learning-module", response_model=LearningModuleResponse)
 async def create_learning_module(concept: str = Form(...)):
     full_text = CHAPTER_CACHE.get("text")
