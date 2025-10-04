@@ -7,7 +7,7 @@ import axios from 'axios';
 // --------------------------
 
 // --- MUI Component Imports ---
-import { 
+import {
   Box, Button, Typography, Paper, CircularProgress, List,
   ListItem, ListItemButton, ListItemText, Divider, TextField,
   Radio, RadioGroup, FormControlLabel, FormControl
@@ -53,7 +53,7 @@ const ContentRenderer = ({ content }) => {
 // --- Main App Component ---
 
 export default function Learn() {
-  const [concepts, setConcepts] =useState([]);
+  const [concepts, setConcepts] = useState([]);
   const [selectedConcept, setSelectedConcept] = useState(null);
   const [explanation, setExplanation] = useState("");
   const [scenario, setScenario] = useState(null);
@@ -67,7 +67,7 @@ export default function Learn() {
     if (!file) return;
     const formData = new FormData();
     formData.append('file', file);
-    
+
     setIsLoading(true);
     setLoadingMessage("AI is analyzing your PDF...");
     setError("");
@@ -76,7 +76,7 @@ export default function Learn() {
     setExplanation("");
 
     try {
-      const res = await axios.post(`${API_URL}/analyze-pdf`, formData);
+      const res = await axios.post(`${API_BASE_URL}/analyze-pdf`, formData);
       setConcepts(res.data.concepts || []); // Guard against missing data
     } catch (err) {
       // FIX: Added console.error for easier debugging
@@ -101,11 +101,11 @@ export default function Learn() {
     formData.append('concept', concept);
 
     try {
-      const res = await axios.post(`${API_URL}/get-learning-module`, formData);
+      const res = await axios.post(`${API_BASE_URL}/get-learning-module`, formData);
       // FIX: Added guards (e.g., "|| []") to prevent crashes if the API response is missing a key.
       setExplanation(res.data.explanation || "");
       setScenario(res.data.scenario || null);
-      setQuiz(res.data.questions || []); 
+      setQuiz(res.data.questions || []);
     } catch (err) {
       // FIX: Added console.error for easier debugging
       console.error("Error fetching learning module:", err);
@@ -171,7 +171,7 @@ export default function Learn() {
             Please upload a chapter and select a topic to begin.
           </Typography>
         )}
-      </Paper> {/* ✅ FIXED: Replaced the two </Box> tags with the correct closing </Paper> tag */}
+      </Paper>
     </Box>
   );
 }
@@ -194,7 +194,7 @@ function ScenarioComponent({ scenario, explanation }) {
     formData.append('user_answer', userAnswer);
     formData.append('explanation', explanation);
     try {
-      const res = await axios.post(`${API_URL}/evaluate-answer`, formData);
+      const res = await axios.post(`${API_BASE_URL}/evaluate-answer`, formData);
       setFeedback(res.data.feedback);
     } catch (err) {
       console.error("Error evaluating answer:", err);
